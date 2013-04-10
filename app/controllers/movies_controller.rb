@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = Movie.ratings_cache
     @orderby = params[:o]
     @movies = Movie.order( @orderby ).all
   end
