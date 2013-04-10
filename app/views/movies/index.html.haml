@@ -5,10 +5,10 @@
   %thead
     %tr
       %th{ :class => [@orderby == 'title' && 'hilite']  }
-        %a#title_header{}= link_to 'Movie Title', :o=>'title'
+        = link_to "Movie Title", { :controller=>"movies", :action=>"index", :o => 'title' }, :id=>"title_header"  
       %th Rating
       %th{ :class => [@orderby == 'release_date' && 'hilite']  }
-        %a#release_date_header= link_to 'Release Date', :o=>'release_date'
+        = link_to 'Release Date', { :controller=>"movies", :action=>"index", :o => 'release_date' }, :id=>'release_date_header' 
       %th More Info
   %tbody
     - @movies.each do |movie|
