@@ -8,15 +8,18 @@ class MoviesController < ApplicationController
 
   def index
     
-    # first time load state from cache structure
+    # first time load state from cache structure with keys -> false
     @all_ratings = Movie.ratings_cache
+    
+    # if first time filter set all visible
+    session[:filter] = @all_ratings.keys if !session[:filter]
    
-    # if any rating selected then update ratings state
+    # if any rating changes update filter
     if params[:ratings] then
-      
       params[:ratings].each do |key, value|
         @all_ratings[key] = true  
       end
+      # filter only keys -> true
       session[:filter] = @all_ratings.select { |k,v| v==true }.keys
     end
     
