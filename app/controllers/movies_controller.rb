@@ -15,8 +15,8 @@ class MoviesController < ApplicationController
     session[:filter] = @all_ratings.keys if !session[:filter]
    
     # if any rating changes set relevant keys -> true
-    if params[:commit] then
-      if params[:ratings] then
+    if params.has_key? :commit then
+      if params.has_key? :ratings then
         params[:ratings].each_key { |key| @all_ratings[key] = true}
         # filter only keys -> true
         session[:filter] = @all_ratings.select { |k,v| v==true }.keys
