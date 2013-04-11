@@ -14,6 +14,9 @@ class MoviesController < ApplicationController
     # if first time filter set all visible
     # session[:filter] = @all_ratings.keys if !session[:filter]
     @filter = params.has_key?(:filter) ? params[:filter].split(':') : @all_ratings.keys 
+    logger.debug "filter: " << @filter.to_s
+    logger.debug "all_ratings(be4): " << @all_ratings.to_s
+    logger.debug "params: " << params.to_s
     
     # if any rating changes set relevant keys -> true
     if params.has_key? :commit then
@@ -25,9 +28,13 @@ class MoviesController < ApplicationController
         @filter = []
       end
     end
-    
+
     @orderby = params[:o]
     @movies = Movie.where( :rating=>@filter ).order( @orderby ).all
+
+    logger.debug "filter(after): " << @filter.to_s
+    logger.debug "all_ratings (after): " << @all_ratings.to_s
+
   end
 
   def new
