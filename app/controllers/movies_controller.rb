@@ -10,24 +10,19 @@ class MoviesController < ApplicationController
     
     # first time load state from cache structure
     @all_ratings = Movie.ratings_cache
-    
+   
     # if any rating selected then update ratings state
     if params[:ratings] then
+      
       params[:ratings].each do |key, value|
         @all_ratings[key] = true  
       end
+      session[:filter] = @all_ratings.select { |k,v| v==true }.keys
     end
-
-    rating_filter = @all_ratings.select { |k,v| v==true }.keys
     
     @orderby = params[:o]
-    @movies = Movie.where( :rating=>rating_filter ).order( @orderby ).all
+    @movies = Movie.where( :rating=>session[:filter] ).order( @orderby ).all
   end
-
-  def ratings
-    
-  end
-
 
   def new
     # default: render 'new' template
