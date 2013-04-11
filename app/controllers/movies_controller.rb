@@ -12,21 +12,22 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.ratings_cache
     
     # if first time filter set all visible
-    session[:filter] = @all_ratings.keys if !session[:filter]
-   
+    # session[:filter] = @all_ratings.keys if !session[:filter]
+    @filter = params.has_key?(:filter) ? params[:filter].split(':') : @all_ratings.keys 
+    
     # if any rating changes set relevant keys -> true
     if params.has_key? :commit then
       if params.has_key? :ratings then
         params[:ratings].each_key { |key| @all_ratings[key] = true}
         # filter only keys -> true
-        session[:filter] = @all_ratings.select { |k,v| v==true }.keys
+        @filter = @all_ratings.select { |k,v| v==true }.keys
        else
-         session[:filter] = []
+        @filter = []
       end
     end
     
     @orderby = params[:o]
-    @movies = Movie.where( :rating=>session[:filter] ).order( @orderby ).all
+    @movies = Movie.where( :rating=>@filter ).order( @orderby ).all
   end
 
   def new
