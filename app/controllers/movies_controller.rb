@@ -7,10 +7,27 @@ class MoviesController < ApplicationController
   end
 
   def index
+    
+    # first time load state from cache structure
     @all_ratings = Movie.ratings_cache
+    
+    # if any rating selected then update ratings state
+    if params[:ratings] then
+      params[:ratings].each do |key, value|
+        @all_ratings[key] = true  
+      end
+    end
+
+    rating_filter = @all_ratings.select { |k,v| v==true }.keys
+    
     @orderby = params[:o]
-    @movies = Movie.order( @orderby ).all
+    @movies = Movie.where( :rating=>rating_filter ).order( @orderby ).all
   end
+
+  def ratings
+    
+  end
+
 
   def new
     # default: render 'new' template

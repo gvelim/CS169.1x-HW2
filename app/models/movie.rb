@@ -11,11 +11,11 @@ class Movie < ActiveRecord::Base
       # get uniq movie objects
       self.select(:rating).uniq.each do |movie|
         # capture the uniq rating values
-        @@rating_keys[movie.rating] = 1
+        @@rating_keys[movie.rating] = false
       end
     end
 
-    return @@rating_keys.keys
+    return @@rating_keys
 
   end
   
