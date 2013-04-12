@@ -10,20 +10,17 @@ class MoviesController < ApplicationController
     
     # load cache structure with keys -> false
     @all_ratings = Movie.ratings_cache
-    
+    debugger
     # if first time filter set all visible
     # if filter data sent with GET extract them otherwise set all checked#
-    @filter = params.has_key?(:filter) ? params[:filter].split(':') : @all_ratings.keys 
-    logger.debug "filter (be4): " << @filter.to_s
-    logger.debug "all_ratings(be4): " << @all_ratings.to_s
+    @filter = params.has_key?(:filter) ? params[:filter].split(':') : (session[:filter] || @all_ratings.keys) 
     
     # if any rating changes set relevant keys -> true
     if params.has_key? :commit then
       if params.has_key? :ratings then 
-        @filter = params[:ratings].keys
+        session[:filter] = @filter = params[:ratings].keys
        else
-        logger.debug ":commit sent with no :ratings"
-        @filter = []
+        @filter = session[:filter]
       end
     end
 
