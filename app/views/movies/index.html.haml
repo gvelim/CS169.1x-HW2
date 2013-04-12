@@ -7,7 +7,7 @@
     = key
     = check_box_tag "ratings[#{key}]", 0, @filter.include?(key)  
   = submit_tag 'Refresh', :id => 'ratings_submit'
--# 
+
 %table#movies
   %thead
     %tr

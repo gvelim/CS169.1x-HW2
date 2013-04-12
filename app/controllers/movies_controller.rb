@@ -12,25 +12,23 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.ratings_cache
     
     # if first time filter set all visible
-    # session[:filter] = @all_ratings.keys if !session[:filter]
+    # if filter data sent with GET extract them otherwise set all checked#
     @filter = params.has_key?(:filter) ? params[:filter].split(':') : @all_ratings.keys 
-    logger.debug "filter: " << @filter.to_s
+    logger.debug "filter (be4): " << @filter.to_s
     logger.debug "all_ratings(be4): " << @all_ratings.to_s
-    logger.debug "params: " << params.to_s
     
     # if any rating changes set relevant keys -> true
     if params.has_key? :commit then
-      if params.has_key? :ratings then
-        params[:ratings].each_key { |key| @all_ratings[key] = true}
-        # filter only keys -> true
-        @filter = @all_ratings.select { |k,v| v==true }.keys
+      if params.has_key? :ratings then 
+        @filter = params[:ratings].keys
        else
+        logger.debug ":commit sent with no :ratings"
         @filter = []
       end
     end
 
     @orderby = params[:o]
-    @movies = Movie.where( :rating=>@filter ).order( @orderby ).all
+    @movies = Movie.where( :rating => @filter ).order( @orderby ).all
 
     logger.debug "filter(after): " << @filter.to_s
     logger.debug "all_ratings (after): " << @all_ratings.to_s
