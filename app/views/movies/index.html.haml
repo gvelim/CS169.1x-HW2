@@ -5,9 +5,9 @@
   Include: 
   - @all_ratings.each_key do |key|
     = key
-    = check_box_tag "ratings[#{key}]", :id => "ratings_#{key}"   
+    = check_box_tag "ratings[#{key}]", 0, @filter.include?(key)  
   = submit_tag 'Refresh', :id => 'ratings_submit'
--# 0, @filter.include?(key),
+-# 
 %table#movies
   %thead
     %tr
