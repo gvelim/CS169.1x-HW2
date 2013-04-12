@@ -10,9 +10,9 @@ class MoviesController < ApplicationController
     
     # load cache structure with keys -> false
     @all_ratings = Movie.ratings_cache
-    debugger
-    # if first time filter set all visible
-    # if filter data sent with GET extract them otherwise set all checked#
+    
+    # if filter data sent with GET extract them otherwise
+      # if first time filter set all visible via @all_ratings.keys otherwise pull from session
     @filter = params.has_key?(:filter) ? params[:filter].split(':') : (session[:filter] || @all_ratings.keys) 
     
     # if any rating changes set relevant keys -> true
@@ -24,11 +24,12 @@ class MoviesController < ApplicationController
       end
     end
 
-    @orderby = params[:o]
-    @movies = Movie.where( :rating => @filter ).order( @orderby ).all
+    # if order GET sent then update sesssion and pass to @orderby
+      # otherwise pass the session (either nil or anyval)
+    @orderby = params.has_key?(:o) ? (session[:orderby] = params[:o]) : session[:orderby] 
 
-    logger.debug "filter(after): " << @filter.to_s
-    logger.debug "all_ratings (after): " << @all_ratings.to_s
+    # filter Movie with :rating, :order    
+    @movies = Movie.where( :rating => @filter ).order( @orderby ).all
 
   end
 
