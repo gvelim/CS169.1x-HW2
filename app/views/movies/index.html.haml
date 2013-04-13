@@ -12,10 +12,10 @@
   %thead
     %tr
       %th{ :class => [@orderby == 'title' && 'hilite']  }
-        = link_to "Movie Title", movies_path(:o => 'title',:filter => @filter.join(':')), :id=>"title_header"  
+        = link_to "Movie Title", movies_path(:orderby => 'title', :filter => @filter), :id=>"title_header"  
       %th Rating
       %th{ :class => [@orderby == 'release_date' && 'hilite']  }
-        = link_to 'Release Date', movies_path(:o => 'release_date', :filter => @filter.join(':')), :id=>'release_date_header' 
+        = link_to 'Release Date', movies_path(:orderby => 'release_date', :filter => @filter), :id=>'release_date_header' 
       %th More Info
   %tbody
     - @movies.each do |movie|
